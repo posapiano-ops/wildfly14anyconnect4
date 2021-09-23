@@ -1,9 +1,0 @@
-.env
-*/.git
-.git
-.gitignore
-*/.vs
-.vs
-*/.vscode
-.vscode
-*/bin
