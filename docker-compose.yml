@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+  wildfly-vpn:
+    #image: dryseawind/wildfly14jdk8
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh -c "cd /opt/jboss/wildfly-14.0.1.Final && ./bin/add-user.sh admin password --silent && ./bin/standalone.sh -c standalone.xml -b 0.0.0.0 -bmanagement 0.0.0.0 --debug -Djboss.http.port=8080"
+    hostname: wildfly-vpn
+    container_name: wildfly-vpn
+    domainname: ${DOMAIN-local.dev}
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - 8080:8080
+      - 9990:9990
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      JAVA_OPTS: -Xms64m -Xmx2G -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=2G -Djava.net.preferIPv4Stack=true
+      TZ: Europe/Rome
+      VPN_URL: "https://vpn_link"
+      VPN_USER: "utente"
+      VPN_PASSWORD: "passowrd"
+      END_POINT_CHECK: "https://endpoint"
+      HTTP_PROXY: "http://vpn-proxy:8888/"
+      HTTPS_PROXY: "http://vpn-proxy:8888/"
+    networks:
+      - eth-vpn
+
+networks:
+  eth-vpn:
+
+      

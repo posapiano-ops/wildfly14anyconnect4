@@ -2,4 +2,4 @@ version: '2'
 services:
   wildfly:
     build: .
-    image: posapiano/wildfly14anyconnect4
+    image: posapiano/wildfly14vpn
