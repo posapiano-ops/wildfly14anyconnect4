@@ -20,7 +20,7 @@ RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${
   && rm docker-${DOCKERVERSION}.tgz
 
 RUN mkdir -p /opt/vpn
-COPY ./script/*.sh /opt/vpn
+COPY ./script/*.sh /opt/vpn/
 RUN chmod +x /opt/vpn/*.sh
 
 RUN groupadd -r jboss -g 1000 && useradd -u 1000 -r -g jboss -m -d /opt/jboss -s /sbin/nologin -c "JBoss user" jboss && \
