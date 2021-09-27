@@ -8,19 +8,14 @@ ENV JBOSS_HOME /opt/jboss/wildfly-14.0.1.Final
 ENV JBOSS_INSTALL /opt/jboss
 ENV config_dir=/opt/jboss/wildfly-14.0.1.Final/standalone/configuration/
 
-ENV DOCKERVERSION=19.03.15 
-
 USER root
 RUN apt update \
-     && apt install -y curl telnet net-tools \ 
+     && apt install -y curl telnet net-tools openconnect iputils-ping iptables \
+        tcpdump \ 
      && rm -rf /var/lib/apt/lists/*
 
-RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERVERSION}.tgz \
-  && tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 -C /usr/local/bin docker/docker \
-  && rm docker-${DOCKERVERSION}.tgz
-
 RUN mkdir -p /opt/vpn
-COPY ./script/*.sh /opt/vpn
+COPY ./script/*.sh /opt/vpn/
 RUN chmod +x /opt/vpn/*.sh
 
 RUN groupadd -r jboss -g 1000 && useradd -u 1000 -r -g jboss -m -d /opt/jboss -s /sbin/nologin -c "JBoss user" jboss && \
@@ -37,7 +32,6 @@ RUN cd $HOME \
     && chown -R jboss:0 ${JBOSS_INSTALL} \
     && chmod -R g+rw ${JBOSS_INSTALL}
 
-#COPY standalone.xml ${config_dir}
 ENV LAUNCH_JBOSS_IN_BACKGROUND true
 
 #USER jboss
